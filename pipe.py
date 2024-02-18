@@ -22,9 +22,9 @@ class pipe:
         self.position = position
         self.connections = connections
 
-pipes = [pipe(60, 60, 1, 3, [1]),
-         pipe(10, 0, 1, 2, [2]),
-         pipe(10, 0, 0, 1, [0])]
+pipes = [pipe(20, 20, 1, 2, [2]),
+         pipe(20, 20, 1, 2, [2]),
+         pipe(50, 0, 0, 1, [0])]
 
 real_total_fluid = 0
 for p in pipes:
@@ -36,16 +36,13 @@ first = True
 
 while loop:
 
-    some = time.perf_counter()
     t1 = threading.Thread(target=wait_input, args=())
     t1.start()
     t1.join()
-    some2 = time.perf_counter()
-    dsome = some2-some
     tic = time.perf_counter()
     if first == True:
         first = False
-        toc = tic - dsome
+        toc = tic
     dtime = tic-toc
 
     total_fluid = 0
@@ -86,27 +83,29 @@ while loop:
 
         for t in range(0, len(ofluid)):
             if ofluid[t] == nfluid[t]:
-                num_equals += 1
-
-            if num_equals == len(ofluid):
-                for e in range(1, len(pipes)):
-                    current_sum += pipes[-e].fluid
-                    if pipes[-e].fluid != pipes[-e].volume:
-                        if pipes[-e].fluid != 0:
-                            fluid_error = real_total_fluid - current_sum
-                            pipes[-e].fluid += fluid_error
+                num_equals += 1        
 
         i += 1
 
         total_fluid += p.fluid
 
+    # correcting errors !may be faulty at the moments because the missing fluid only gets added to the first pipe (usually the top-most one)!
+    fluid_error = real_total_fluid - total_fluid
+
+    if num_equals == len(ofluid):
+            print("nothing has changed")
+            if fluid_error != 0:
+                for t in pipes:
+                   if t.fluid != 0:
+                       t.fluid += fluid_error
+
     toc = time.perf_counter()
 
+    # debug stuff
     clear()
     print(f"tic: {tic:0.4f} | toc: {toc:0.4f} | dtime: {dtime:0.4f}")
     for p in pipes:
         print(f"volume: {p.volume} | fluid: {p.fluid:0.4f} | flowrate: {p.flowrate} | position: {p.position} | connections: {p.connections}")
-    print(f"total fluid in the system: {total_fluid:0.4f} | real total fluid in the system: {real_total_fluid:0.4f}")
+    print(f"total fluid in the system: {total_fluid:0.4f} | real total fluid in the system: {real_total_fluid:0.4f} | error in fluid calculations: {fluid_error:0.4f}")
     print("")
 
-    #command = input("New command: ")
