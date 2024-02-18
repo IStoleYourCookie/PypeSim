@@ -36,6 +36,7 @@ first = True
 
 while loop:
 
+    # setting up input fuction in another thread to allow time.perf_counter to measure time while the program is waiting for input
     t1 = threading.Thread(target=wait_input, args=())
     t1.start()
     t1.join()
@@ -47,6 +48,7 @@ while loop:
 
     total_fluid = 0
     i = 0
+    # this currently needs to be set up manually like so: write as many '0' elements to each array as many pipe objects are there
     ofluid = [0, 0, 0]
     nfluid = [0, 0, 0]
 
@@ -77,6 +79,7 @@ while loop:
                 if pipes[c].fluid < 0:
                     pipes[c].fluid = 0
 
+        # checking if the system has reached an equilibrium
         nfluid[i] = p.fluid
         num_equals = 0
         current_sum = 0
