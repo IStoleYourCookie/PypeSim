@@ -32,7 +32,7 @@ for p in pipes:
 loop = True
 toc = 0
 first = True
-command = ' '
+#command = ' '
 
 while loop:
 
@@ -41,6 +41,7 @@ while loop:
     t1.start()
     t1.join()
 
+    """
     if command[0] != '':
         if command[0] == 'c':
             if command[1] == 'v':
@@ -57,6 +58,8 @@ while loop:
 
             elif command[1] == 'c':
                 pipes[command[2]].connections = input("new connections: ")
+
+    """
 
     tic = time.perf_counter()
     if first == True:
