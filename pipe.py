@@ -8,8 +8,7 @@ def clear():
     else:
         _ = system('clear')
 
-command = None
-def wait_input():
+def wait_input(command):
     command = input("New command: ")
 
 print("Hello World!")
@@ -33,13 +32,32 @@ for p in pipes:
 loop = True
 toc = 0
 first = True
+command = ' '
 
 while loop:
 
     # setting up input fuction in another thread to allow time.perf_counter to measure time while the program is waiting for input
-    t1 = threading.Thread(target=wait_input, args=())
+    t1 = threading.Thread(target=wait_input, args=(command))
     t1.start()
     t1.join()
+
+    if command[0] != '':
+        if command[0] == 'c':
+            if command[1] == 'v':
+                pipes[command[2]].volume = input("new volume: ")
+
+            elif command[1] == 'f':
+                pipes[command[2]].fluid = input("new fluid: ")
+
+            elif command[1] == 'F':
+                pipes[command[2]].flowrate = input("new flowrate: ")
+
+            elif command[1] == 'p':
+                pipes[command[2]].position = input("new position: ")
+
+            elif command[1] == 'c':
+                pipes[command[2]].connections = input("new connections: ")
+
     tic = time.perf_counter()
     if first == True:
         first = False
