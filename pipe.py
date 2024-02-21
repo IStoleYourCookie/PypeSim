@@ -8,8 +8,8 @@ def clear():
     else:
         _ = system('clear')
 
-def wait_input(command):
-    command = input("New command: ")
+def wait_input(result, index):
+    result[index] = input("New commands[0]: ")
 
 print("Hello World!")
 
@@ -32,34 +32,37 @@ for p in pipes:
 loop = True
 toc = 0
 first = True
-#command = ' '
+commands = [None] * 100
 
 while loop:
 
     # setting up input fuction in another thread to allow time.perf_counter to measure time while the program is waiting for input
-    t1 = threading.Thread(target=wait_input, args=(command))
+    t1 = threading.Thread(target=wait_input, args=(commands, 0))
     t1.start()
     t1.join()
 
-    """
-    if command[0] != '':
-        if command[0] == 'c':
-            if command[1] == 'v':
-                pipes[command[2]].volume = input("new volume: ")
+    if [0] != '':
+        if len(commands[0]) > 0:
 
-            elif command[1] == 'f':
-                pipes[command[2]].fluid = input("new fluid: ")
+            print("a command was passed to the program")
+            print(f"the command: {commands[0]}")
 
-            elif command[1] == 'F':
-                pipes[command[2]].flowrate = input("new flowrate: ")
+            if commands[0][0] == 'c':
+                if commands[0][1] == 'v':
+                    pipes[int(commands[0][2])].volume = int(input("new volume: "))
 
-            elif command[1] == 'p':
-                pipes[command[2]].position = input("new position: ")
+                elif commands[0][1] == 'f':
+                    pipes[int(commands[0][2])].fluid = int(input("new fluid: "))
 
-            elif command[1] == 'c':
-                pipes[command[2]].connections = input("new connections: ")
+                elif commands[0][1] == 'F':
+                    pipes[int(commands[0][2])].flowrate = int(input("new flowrate: "))
 
-    """
+                elif commands[0][1] == 'p':
+                    pipes[int(commands[0][2])].position = int(input("new position: "))
+
+                elif commands[0][1] == 'c':
+                    pipes[int(commands[0][2])].connections = input("new connections: ")
+
 
     tic = time.perf_counter()
     if first == True:
@@ -69,7 +72,7 @@ while loop:
 
     total_fluid = 0
     i = 0
-    # this currently needs to be set up manually like so: write as many '0' elements to each array as many pipe objects are there
+    # this currently needs to be set up manually like so: write as many '0' elements to each array as how many pipe objects are there
     ofluid = [0, 0, 0]
     nfluid = [0, 0, 0]
 
@@ -92,8 +95,9 @@ while loop:
         for c in p.connections:
 
             if pipes[c].position < p.position:
-                
-                pipes[c].fluid += p.flowrate * dtime
+
+                if p.flowrate > 0:
+                    pipes[c].fluid += p.flowrate * dtime
 
                 if pipes[c].fluid > pipes[c].volume:
                     pipes[c].fluid = pipes[c].volume
