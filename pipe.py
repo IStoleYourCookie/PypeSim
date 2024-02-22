@@ -11,6 +11,12 @@ def clear():
 def wait_input(result, index):
     result[index] = input("New commands[0]: ")
 
+def execute_code(code):
+    try:
+        exec(code)
+    except Exception as e:
+        print("Error:", e)
+
 print("Hello World!")
 
 class pipe:
@@ -47,6 +53,7 @@ while loop:
             print("a command was passed to the program")
             print(f"the command: {commands[0]}")
 
+            # deifferent pre-defined commands to control different aspects of the simulation and the attributes of pipes
             if commands[0][0] == 'c':
                 if commands[0][1] == 'v':
                     pipes[int(commands[0][2])].volume = int(input("new volume: "))
@@ -62,6 +69,22 @@ while loop:
 
                 elif commands[0][1] == 'c':
                     pipes[int(commands[0][2])].connections = input("new connections: ")
+
+            # the user can input a multiline python script that is executed in the main thread, in the main process, so that the user has time to write a script
+            # without having to worry about the simulation 
+
+            elif commands[0][0] == 'e':
+                lines = []
+                num = 1
+                while True:
+                    line = input(f"{num}|  ")
+                    if line:
+                        lines.append(line)
+                        num += 1
+                    else:
+                        break
+                user_code = '\n'.join(lines)
+                execute_code(user_code)
 
 
     tic = time.perf_counter()
