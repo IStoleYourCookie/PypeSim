@@ -95,9 +95,13 @@ while loop:
 
     total_fluid = 0
     i = 0
-    # this currently needs to be set up manually like so: write as many '0' elements to each array as how many pipe objects are there
-    ofluid = [0, 0, 0]
-    nfluid = [0, 0, 0]
+
+    # write as many '0' elements to each array as how many pipe objects are there; used for checking if the system has reached an equilibrium
+    ofluid = []
+    nfluid = []
+    for o in range(0, len(pipes)):
+        ofluid.append(0)
+        nfluid.append(0)
 
     for p in pipes:
         ofluid[i] = p.fluid
