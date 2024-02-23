@@ -144,7 +144,7 @@ while loop:
 
         total_fluid += p.fluid
 
-    # correcting errors !may be faulty at the moments because the missing fluid only gets added to the first pipe (usually the top-most one)!
+    # correcting errors !may be faulty at the moment because the missing fluid only gets added to the first pipe (usually the top-most one)!
     fluid_error = real_total_fluid - total_fluid
 
     if num_equals == len(ofluid):
