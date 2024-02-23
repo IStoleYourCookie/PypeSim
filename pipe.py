@@ -27,7 +27,8 @@ class pipe:
         self.position = position
         self.connections = connections
 
-pipes = [pipe(20, 20, 1, 2, [2]),
+# example pipe system
+pipes = [pipe(20, 20, 1, 3, [2]),
          pipe(20, 20, 1, 2, [2]),
          pipe(50, 0, 0, 1, [0])]
 
