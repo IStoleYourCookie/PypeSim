@@ -40,6 +40,8 @@ loop = True
 toc = 0
 first = True
 commands = [None] * 100
+scripts = [None] * 100
+embeds = [None] * 100
 
 while loop:
 
@@ -80,6 +82,19 @@ while loop:
                 while True:
                     line = input(f"{num}|  ")
                     if line:
+
+                        if line == "^S":
+                            s = input("script index to save to: ")
+                            scrpits[int(s)] = '\n'.join(lines)
+
+                        elif line == "^L":
+                            s = input("script index to load from: ")
+                            execute_code(scripts[int(s)])
+
+                        elif line == "^E":
+                            s = input("script index to save to: ")
+                            embeds[int(s)] = '\n'.join(lines)
+
                         lines.append(line)
                         num += 1
                     else:
@@ -103,6 +118,9 @@ while loop:
     for o in range(0, len(pipes)):
         ofluid.append(0)
         nfluid.append(0)
+
+    for e in embeds:
+        execute_code(e)
 
     for p in pipes:
         ofluid[i] = p.fluid
