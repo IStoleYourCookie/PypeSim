@@ -1,6 +1,7 @@
 import time
 from os import system, name
 import threading
+import re
 
 def clear():
     if name == 'nt':
@@ -77,7 +78,7 @@ while loop:
             # without having to worry about the simulation 
 
             elif commands[0][0] == 'e':
-                lines = []
+                lines = [''] * 100
                 num = 1
                 while True:
                     line = input(f"{num}|  ")
@@ -85,9 +86,19 @@ while loop:
 
                         if line == "^S":
                             s = input("script index to save to: ")
-                            scrpits[int(s)] = '\n'.join(lines)
+                            scripts[int(s)] = '\n'.join(lines)
 
                         elif line == "^L":
+                            s = input("script index to load from: ")
+                            lines = re.split('\n', scripts[int(s)])
+                            for f in range(0, len(lines)):
+                                if lines[f] != '':
+                                    print(f"{f}|  {lines[f]}")
+
+                        elif line == "jump":
+                            num = int(input("index to jump to: "))
+
+                        elif line == "^R":
                             s = input("script index to load from: ")
                             execute_code(scripts[int(s)])
 
@@ -95,8 +106,9 @@ while loop:
                             s = input("script index to save to: ")
                             embeds[int(s)] = '\n'.join(lines)
 
-                        lines.append(line)
-                        num += 1
+                        else:
+                            lines[num] = line
+                            num += 1
                     else:
                         break
                 user_code = '\n'.join(lines)
@@ -120,7 +132,8 @@ while loop:
         nfluid.append(0)
 
     for e in embeds:
-        execute_code(e)
+        if e != None:
+            execute_code(e)
 
     for p in pipes:
         ofluid[i] = p.fluid
