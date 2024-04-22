@@ -6,10 +6,11 @@
 #include <chrono>
 using namespace std;
 #include <string>
+//#include <thread>
 
 void clear()
 {
-  cout << "\033[2J\033[1;1H";
+  //cout << "\033[2J\033[1;1H";
 }
 
 class pipe
@@ -19,13 +20,13 @@ class pipe
     int fluid;
     int flowrate;
     int position;
-    int connections[100];
+    int connections[1];
 };
 
 
 int main(int argc, char const *argv[])
 {
-  pipe pipes[100];
+  pipe pipes[3];
 
   pipes[0].volume = 60;
   pipes[0].fluid = 60;
@@ -60,7 +61,7 @@ int main(int argc, char const *argv[])
 
   while (loop)
   {
-    cout << "entered main while loop" << endl;
+    //cout << "entered main while loop" << endl;
     auto tic = chrono::high_resolution_clock::now();
     
     if (first)
@@ -69,9 +70,9 @@ int main(int argc, char const *argv[])
       toc = tic;
     }
         
-    cout << "tic variable has been initialised, printing before dtime calculation" << endl;
+    //cout << "tic variable has been initialised, printing before dtime calculation" << endl;
     dtime = (chrono::duration_cast<chrono::nanoseconds>(tic-toc).count())/1000000000;
-    cout << "dtime calculation has taken place" << endl;
+    //cout << "dtime calculation has taken place" << endl;
     total_fluid = 0;
     n = 0;
 
@@ -82,11 +83,10 @@ int main(int argc, char const *argv[])
       ofluid[i] = 0;
       nfluid[i] = 0;
     }
-    cout << "ofluid and nfluid arrays initialised." << endl;
-
+    //cout << "ofluid and nfluid arrays initialised." << endl;
     for (pipe p : pipes)
     {
-      cout << "inside main fluid logic loop" << endl;
+      //cout<<" "<<p.volume<<" "<<p.fluid<<" "<<p.flowrate<<" "<<p.position<<" "<<p.connections << endl;
       ofluid[n] = p.fluid;
       if (p.fluid > 0)
       {
@@ -127,12 +127,12 @@ int main(int argc, char const *argv[])
       total_fluid += p.fluid;
 
     }
-    cout << "main fluid logic has been done, error calculation is next" << endl;
+    //cout << "main fluid logic has been done, error calculation is next" << endl;
 
     fluid_error = real_total_fluid - total_fluid;
     if (num_equals == 100)
     {
-      cout << "nothing has changed";
+      cout << "nothing has changed" << endl;
       if (fluid_error != 0)
       {
         for (pipe t : pipes)
@@ -142,8 +142,9 @@ int main(int argc, char const *argv[])
       }
     }
 
-    cout << "reached the end of fluid logic";
+    //cout << "reached the end of fluid logic";
     auto toc = chrono::high_resolution_clock::now();
+
 
     //debug stuff
     clear();
