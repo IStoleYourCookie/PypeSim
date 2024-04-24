@@ -4,6 +4,7 @@
 //re
 #include <iostream>
 #include <chrono>
+#include <ctime>
 using namespace std;
 #include <string>
 //#include <thread>
@@ -17,8 +18,8 @@ class pipe
 {
   public:
     int volume;
-    int fluid;
-    int flowrate;
+    float fluid;
+    float flowrate;
     int position;
     int connections[1];
 };
@@ -47,7 +48,6 @@ int main(int argc, char const *argv[])
   pipes[2].connections[0] = 0;
 
   bool loop = true;
-  double dtime;
   int n = 0;
   int total_fluid = 0;
   int num_equals;
@@ -55,14 +55,17 @@ int main(int argc, char const *argv[])
   int real_total_fluid = 0;
   int fluid_error;
   bool first;
-  auto toc = chrono::high_resolution_clock::now();
+  float dtime;
+
+  auto toc = chrono::system_clock::now();
 
   for (pipe p : pipes) {real_total_fluid += p.fluid;}
 
   while (loop)
   {
     //cout << "entered main while loop" << endl;
-    auto tic = chrono::high_resolution_clock::now();
+    dtime = 0;
+    auto tic = chrono::system_clock::now();
     
     if (first)
     {
@@ -71,14 +74,15 @@ int main(int argc, char const *argv[])
     }
         
     //cout << "tic variable has been initialised, printing before dtime calculation" << endl;
-    dtime = (chrono::duration_cast<chrono::nanoseconds>(tic-toc).count())/1000000000;
+    chrono::duration<double> elapsed_seconds = tic-toc;
+    dtime = elapsed_seconds.count();
     //cout << "dtime calculation has taken place" << endl;
     total_fluid = 0;
     n = 0;
 
-    int ofluid[100];
-    int nfluid[100];
-    for (int i = 0; i < 100; i++)
+    int ofluid[3];
+    int nfluid[3];
+    for (int i = 0; i < 3; i++)
     {
       ofluid[i] = 0;
       nfluid[i] = 0;
@@ -143,7 +147,7 @@ int main(int argc, char const *argv[])
     }
 
     //cout << "reached the end of fluid logic";
-    auto toc = chrono::high_resolution_clock::now();
+    auto toc = chrono::system_clock::now();
 
 
     //debug stuff
