@@ -55,28 +55,19 @@ int main(int argc, char const *argv[])
   int real_total_fluid = 0;
   int fluid_error;
   bool first;
-  float dtime;
+  float dtime = 0;
+  string input;
 
   auto toc = chrono::system_clock::now();
+  auto tic = chrono::system_clock::now();
+  chrono::duration<double> elapsed_seconds;
 
   for (pipe p : pipes) {real_total_fluid += p.fluid;}
 
   while (loop)
   {
-    //cout << "entered main while loop" << endl;
-    dtime = 0;
-    auto tic = chrono::system_clock::now();
-    
-    if (first)
-    {
-      first = false;
-      toc = tic;
-    }
-        
-    //cout << "tic variable has been initialised, printing before dtime calculation" << endl;
-    chrono::duration<double> elapsed_seconds = tic-toc;
-    dtime = elapsed_seconds.count();
-    //cout << "dtime calculation has taken place" << endl;
+    tic = chrono::system_clock::now();
+
     total_fluid = 0;
     n = 0;
 
@@ -147,8 +138,11 @@ int main(int argc, char const *argv[])
     }
 
     //cout << "reached the end of fluid logic";
-    auto toc = chrono::system_clock::now();
-
+    //testing dtime conventions
+    cin.get();
+    toc = chrono::system_clock::now();
+    elapsed_seconds = toc-tic;
+    dtime = elapsed_seconds.count();
 
     //debug stuff
     clear();
